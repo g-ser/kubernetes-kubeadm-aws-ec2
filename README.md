@@ -15,8 +15,15 @@ A high level view of the virtual infrastructure which will be created by the ter
  ![High Level Setup](/images/high_level_view.png)
 
 #### Notes
-
-
+* Subnet 10.0.1.0/24 is private in the sense that instances that are created inside it do not get a public IP
+* Subnet 10.0.2.0/24 is public in the sense that instances which are created inside it get a public and a private IP
+* All the nodes related to the kubernetes cluster are located inside the private subnet
+* Two route tables are created: one associated to the public subnet and one associated to the private subnet
+* The default route of the private subnet is the NAT gateway which resides in the public subnet 
+* The default route of the public subnet is the Internet Gateway (IGW)
+* The master node of the kubernetes cluster and the worker nodes are in two different security groups which allow all the icmp traffic and the traffic that a kubernetes cluster generates to operate: ([ports and protocols used by Kubernetes components](https://kubernetes.io/docs/reference/ports-and-protocols/))
+* No configuration is applied to AWS's default Network ACL which comes when creating the VPC which means that it does not block any traffic.
+* Access to the master and worker nodes for administrative purposes can be achieved using AWS Systems Manager. This means that the nodes have the SSM Agent installed and you can access them using the AWS CLI (installation of the Session Manager plugin for the AWS CLI is required: ([Install the Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html))
 # Run terraform
 
 # Installation of kubernetes with kubeadm
@@ -56,7 +63,7 @@ Update the apt package index and install packages to allow apt to use a reposito
 `apt-get -y install ca-certificates curl gnupg lsb-release`
 
 
-Add Dockerâ€™s official GPG key:
+Add Docker’s official GPG key:
 
 `mkdir -p /etc/apt/keyrings`
 
