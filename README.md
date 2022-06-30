@@ -64,7 +64,7 @@ Update the apt package index and install packages to allow apt to use a reposito
 `apt-get -y install ca-certificates curl gnupg lsb-release`
 
 
-Add Docker�s official GPG key:
+Add Docker's official GPG key:
 
 `mkdir -p /etc/apt/keyrings`
 
