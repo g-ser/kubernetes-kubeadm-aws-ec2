@@ -12,7 +12,7 @@ After running terraform and having the EC2 related infrastructure in place, you 
 
 A high level view of the virtual infrastructure which will be created by the terraform configuration files included in this repo can be seen in the picture below:
 
- ![High Level Setup](/images/high_level_view.png)
+ ![High Level Setup](/assets/images/high_level_view.png)
 
 #### Notes
 * Subnet 10.0.1.0/24 is private in the sense that instances that are created inside it do not get a public IP
