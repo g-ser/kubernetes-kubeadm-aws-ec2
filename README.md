@@ -24,6 +24,7 @@ A high level view of the virtual infrastructure which will be created by the ter
 * The master node of the kubernetes cluster and the worker nodes are in two different security groups which allow all the icmp traffic and the traffic that a kubernetes cluster generates to operate: ([ports and protocols used by Kubernetes components](https://kubernetes.io/docs/reference/ports-and-protocols/))
 * No configuration is applied to AWS's default Network ACL which comes when creating the VPC which means that it does not block any traffic.
 * Access to the master and worker nodes for administrative purposes can be achieved using AWS Systems Manager. This means that the nodes have the SSM Agent installed and you can access them using the AWS CLI (installation of the Session Manager plugin for the AWS CLI is required: ([Install the Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html))
+
 # Run terraform
 
 # Installation of kubernetes with kubeadm
@@ -63,7 +64,7 @@ Update the apt package index and install packages to allow apt to use a reposito
 `apt-get -y install ca-certificates curl gnupg lsb-release`
 
 
-Add Docker’s official GPG key:
+Add Dockerï¿½s official GPG key:
 
 `mkdir -p /etc/apt/keyrings`
 
