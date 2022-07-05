@@ -12,7 +12,7 @@ After running terraform and having the EC2 related infrastructure in place, you 
 
 * Your local machine, has to have terraform installed so you can run the terraform configuration files included in this repository. This repo has been tested with terraform 1.2.4
 * Since Ansible is used for the configuration of the EC2 instances (i.e. for installing kubernetes with kubeadm), you also need to have Ansible installed on your local machine which will play the role of an Ansible control node. This repo has been tested with Ansible 2.13.1
-* Make sure that [community.aws collection](https://docs.ansible.com/ansible/latest/collections/community/aws/aws_ssm_connection.html#:~:text=community.aws%20collection) is installed so Ansible can access the EC2 instances using AWS SSM
+* Make sure that [community.aws collection](https://docs.ansible.com/ansible/latest/collections/community/aws/aws_ssm_connection.html#:~:text=community.aws%20collection) is installed so Ansible can access the EC2 instances using AWS SSM (This project uses AWS SSM instead of SSH in order for Ansible to manage the EC2 instances) 
 
 
 # Architecture
