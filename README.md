@@ -8,6 +8,12 @@ After running terraform and having the EC2 related infrastructure in place, you 
 
 **Note: The virtual infrastructure provisioned by the configuration files of this repository, is intended to be used ONLY for training purposes!**
 
+# Prerequisites for working with the repo
+
+* Your local machine, has to have terraform installed so you can run the terraform configuration files included in this repository. This repo has been tested with terraform 1.2.4
+* Since Ansible is used for the configuration of the EC2 instances (i.e. for installing kubernetes with kubeadm), you also need to have Ansible installed on your local machine which will play the role of an Ansible control node. This repo has been tested with Ansible 2.13.1
+
+
 # Architecture
 
 A high level view of the virtual infrastructure which will be created by the terraform configuration files included in this repo can be seen in the picture below:
