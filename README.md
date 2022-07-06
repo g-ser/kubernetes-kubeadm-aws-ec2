@@ -8,6 +8,32 @@ After running terraform and having the EC2 related infrastructure in place, you 
 
 **Note: The virtual infrastructure provisioned by the configuration files of this repository, is intended to be used ONLY for training purposes!**
 
+# Accessing the EC2 instances
+
+Access to the EC2 instances is needed both for humans and Ansible (which is used to install the kubernetes cluster). Although the AWS security groups where the instances are placed do **not** include any ingress rule to allow SSH traffic (port 22); using SSH to connect to them is still possible using AWS Systems Manager. Terraform installs SSM Agent on the instances. 
+
+### Human Access
+In order for a client (e.g. you local machine) to interact with them it needs to fullfil the below:
+
+* Have AWS CLI installed: [Installation of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+* Have the Session Manager plugin for the AWS CLI installed: [Install the Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
+* Have the configuration below into the SSH configuration file of your local machine (typically located at ```~/.ssh/config```)
+<br/><br/>
+```shell
+# SSH over Session Manager
+host i-* mi-*
+    ProxyCommand sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
+```
+<br/><br/>
+* Specify in the ```~/.aws/config``` file the AWS region like below:
+<br/><br/>
+```shell
+[default]
+region=<AWS_REGION>
+```
+<br/><br/>
+You can connect using the command: ```ssh -i <KEY_PEM_FILE> <USER_NAME>@<INSTANCE_ID>```
+The USER_NAME of the kubernetes related nodes (i.e.: master node and worker nodes) is ```ubuntu```. The USER_NAME of the nginx server is ```ec2-user``` 
 # Prerequisites for working with the repo
 
 * Your local machine, has to have terraform installed so you can run the terraform configuration files included in this repository. This repo has been tested with terraform 1.2.4
