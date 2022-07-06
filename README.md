@@ -67,6 +67,7 @@ A high level view of the virtual infrastructure which will be created by the ter
 ### Run terraform
 
 ### Run Ansible
+```ansible-playbook --private-key <KEY_PEM_FILE> -i inventory git-setup.yml```
 
 # Installation of kubernetes with kubeadm
 
