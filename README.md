@@ -8,6 +8,12 @@ After running terraform and having the EC2 related infrastructure in place, you 
 
 **Note: The virtual infrastructure provisioned by the configuration files of this repository, is intended to be used ONLY for training purposes!**
 
+# Prerequisites for working with the repo
+
+* Your local machine, has to have terraform installed so you can run the terraform configuration files included in this repository. This repo has been tested with terraform 1.2.4
+* Since Ansible is used for the configuration of the EC2 instances (i.e. for installing kubernetes with kubeadm), you also need to have Ansible installed on your local machine which will play the role of an Ansible control node. This repo has been tested with Ansible 2.13.1
+* You need to use AWS console (prior to running the terraform configuration files) to generate a key-pair whose name you need to specify in the ``provision_infra/terraform.tfvars`` file (variable name is ```key_name```)
+
 # Accessing the EC2 instances
 
 Access to the EC2 instances is needed both for humans and Ansible (which is used to install the kubernetes cluster). Although the AWS security groups where the instances are placed do **not** include any ingress rule to allow SSH traffic (port 22); using SSH to connect to them is still possible thanks to AWS Systems Manager. Terraform installs SSM Agent on the instances. 
@@ -33,18 +39,16 @@ region=<AWS_REGION>
 ```
 <br/><br/>
 You can connect using the command: ```ssh -i <KEY_PEM_FILE> <USER_NAME>@<INSTANCE_ID>```
-The ```USER_NAME``` of the kubernetes related nodes (i.e.: master node and worker nodes) is ```ubuntu```. The USER_NAME of the nginx server is ```ec2-user```. The ```KEY_PEM_FILE``` should point to the key 
+The ```USER_NAME``` of the kubernetes related nodes (i.e.: master node and worker nodes) is ```ubuntu```. The USER_NAME of the nginx server is ```ec2-user```. The ```KEY_PEM_FILE``` is the path pointing to the pem file of the key-pair that you need to generate as discussed in the [Prerequisites for working with the repo](#Prerequisites for working with the repo) section.
 
+### Ansible Access
+When Ansible does not find an ```ansible.cfg``` file, it uses the defaults which means that it will use the configuration of ```~/.ssh/config``` for connecting via SSH to the hosts which needs to interact with. From that perspective, in order for Ansible to connect to the EC2 instances via SSH, all the points discussed in the section above ([Human Access](###Human Access)) are still relevant. The playbooks themselves define the user that needs to be used, however, you still need to specify the ```KEY_PEM_FILE``` which is the pem file of the key-pair that you need to generate using AWS console as discussed in the [Prerequisites for working with the repo](#Prerequisites for working with the repo) section.
+For running the playbook of this repository follow the instructions in the section below: [Run Ansible](###Run Ansible)
 
-# Prerequisites for working with the repo
-
-* Your local machine, has to have terraform installed so you can run the terraform configuration files included in this repository. This repo has been tested with terraform 1.2.4
-* Since Ansible is used for the configuration of the EC2 instances (i.e. for installing kubernetes with kubeadm), you also need to have Ansible installed on your local machine which will play the role of an Ansible control node. This repo has been tested with Ansible 2.13.1
-* You need to use AWS console (prior to running the terraform configuration files) to generate a key-pair whose name you need to specify in the ``provision_infra/terraform.tfvars`` file (variable name is ```key_name```)
 
 # Architecture
 
-A high level view of the virtual infrastructure which will be created by the terraform configuration files included in this repo can be seen in the picture below:
+A high level view of the virtual infrastructure which will be created by the terraform configuration files included in this repo can be seen in the picture below: 
 
  ![High Level Setup](/assets/images/high_level_view.png)
 
@@ -58,7 +62,11 @@ A high level view of the virtual infrastructure which will be created by the ter
 * The master node of the kubernetes cluster and the worker nodes are in two different security groups which allow all the icmp traffic and the traffic that a kubernetes cluster generates to operate: ([ports and protocols used by Kubernetes components](https://kubernetes.io/docs/reference/ports-and-protocols/))
 * No configuration is applied to AWS's default Network ACL which comes when creating the VPC which means that it does not block any traffic.
 
-# Run terraform
+# Provision and configure the infrastructure
+
+### Run terraform
+
+### Run Ansible
 
 # Installation of kubernetes with kubeadm
 
