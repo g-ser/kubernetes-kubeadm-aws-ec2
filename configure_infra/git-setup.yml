@@ -1,0 +1,11 @@
+--- # install git on target host
+- hosts: master_node
+  become: yes
+  remote_user: ubuntu
+  gather_facts: yes
+  tasks:
+    - name: edit host file
+      lineinfile:
+        path: /etc/hosts
+        line: "169.168.0.1 ansible.xyzcorp.com"
+        

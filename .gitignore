@@ -32,3 +32,6 @@ terraform.rc
 
 # Ignore macOS .DS_Store folder
 .DS_Store
+
+# Ignore the Ansible inventory file since it is auto-generated
+configure_infra/inventory
