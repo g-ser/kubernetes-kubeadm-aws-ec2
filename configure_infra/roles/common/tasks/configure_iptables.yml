@@ -1,0 +1,13 @@
+---
+- name: load br_netfilter module
+  modprobe:
+    name: br_netfilter
+    state: present
+- name: Set net.bridge.bridge-nf-call-iptables to 1
+  copy:
+    dest: "/etc/sysctl.d/k8s.conf"
+    content: |
+      net.bridge.bridge-nf-call-ip6tables = 1
+      net.bridge.bridge-nf-call-iptables = 2
+- name: Connect to system manager
+  shell: sysctl --system

@@ -1,0 +1,15 @@
+---
+- name: Download GO's linux installer
+  ansible.builtin.get_url:
+    url: https://storage.googleapis.com/golang/getgo/installer_linux
+    dest: /tmp
+- name: Change permission on installer_linux file
+  file:
+    path: /tmp/installer_linux
+    state: file
+    owner: root
+    group: root
+    mode: 0755
+- name: Execute go installer
+  shell: 
+    cmd: /tmp/installer_linux  

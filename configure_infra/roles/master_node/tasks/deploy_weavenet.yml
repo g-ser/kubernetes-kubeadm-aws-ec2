@@ -1,0 +1,8 @@
+---
+- name: retrieve weavenet file
+  get_url:
+    url: https://cloud.weave.works/k8s/net?k8s-version=1.24.2
+    dest: /tmp
+
+- name: create deployment
+  ansible.builtin.shell: kubectl apply -f /tmp/net.yaml

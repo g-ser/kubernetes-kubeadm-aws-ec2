@@ -363,9 +363,6 @@ resource "aws_instance" "k8s_master_node" {
     network_interface_id = aws_network_interface.master_node_iface.id
     device_index         = 0
   }
-  # t2.medium instance type covers kubeadm minimun 
-  # requirements for the master node which are 2 CPUS
-  # and 1700 MB memory
   instance_type = var.master_node_instance_type
   user_data = "${data.cloudinit_config.master_node.rendered}"
   iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name

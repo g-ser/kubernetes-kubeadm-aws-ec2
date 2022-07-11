@@ -1,0 +1,22 @@
+---
+- hosts: master_node:worker_nodes
+  become: yes
+  remote_user: ubuntu
+  roles:
+    - common
+
+- hosts: master_node
+  become: yes
+  vars:
+    os_environment:
+      - key: KUBECONFIG
+        value : /etc/kubernetes/admin.conf
+  remote_user: ubuntu
+  roles:
+    - master_node
+
+- hosts: worker_nodes
+  become: yes
+  remote_user: ubuntu
+  roles:
+    - worker_nodes

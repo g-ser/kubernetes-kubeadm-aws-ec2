@@ -15,6 +15,9 @@ public_subnet_cidr_block = "10.0.2.0/24"
 # master node
 master_node_ip_address = "10.0.1.4"
 master_node_ami = "ami-052efd3df9dad4825"
+# t2.medium instance type covers kubeadm minimun 
+# requirements for the master node which are 2 CPUS
+# and 1700 MB memory
 master_node_instance_type = "t2.medium"
 
 # worker nodes

@@ -1,0 +1,3 @@
+---
+- name: join cluster
+  shell: "{{ hostvars[groups['master_node'][0]]['join_command'] }} --cri-socket unix:///var/run/cri-dockerd.sock"

@@ -1,0 +1,48 @@
+---
+- name: Update the apt package index
+  apt:
+    update_cache: yes 
+    force_apt_get: yes
+    cache_valid_time: 3600
+
+- name: Install necessary packages 
+  apt:
+    pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: latest
+    update_cache: true
+
+- name: Create keyring directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    recurse: yes
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install docker-ce, docker-ce-cli, containerd.io & docker-compose-plugin
+  apt:
+    name: ['docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-compose-plugin']
+    state: latest
+    update_cache: true
+
+- name: Start docker service on boot  
+  ansible.builtin.systemd:
+    name: docker.service
+    enabled: yes
+
+- name: Start containerd service on boot  
+  ansible.builtin.systemd:
+    name: containerd.service
+    enabled: yes

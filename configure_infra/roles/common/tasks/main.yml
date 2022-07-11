@@ -1,0 +1,11 @@
+---
+- name: Let iptables see bridged traffic
+  import_tasks: configure_iptables.yml
+- name: Docker installation
+  import_tasks: install_docker.yml
+- name: Install GO
+  import_tasks: install_go.yml
+- name: Install cri-dockerd
+  import_tasks: install_cri_dockerd.yml
+- name: Install kubectl kubeadm and kubelet
+  import_tasks: install_kubectl_kubeadm_kubelet.yml

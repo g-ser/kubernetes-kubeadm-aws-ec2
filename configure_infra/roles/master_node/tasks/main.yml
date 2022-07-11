@@ -1,0 +1,5 @@
+---
+- name: Initialize kubeadm
+  import_tasks: initialize_kubeadm.yml
+- name: Deploy weavenet
+  import_tasks: deploy_weavenet.yml

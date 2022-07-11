@@ -1,0 +1,3 @@
+---
+- name: Initialize kubeadm
+  import_tasks: join_worker_nodes.yml
