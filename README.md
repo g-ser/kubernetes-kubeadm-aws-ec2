@@ -59,7 +59,7 @@ A high level view of the virtual infrastructure which will be created by the ter
 #### Notes
 * Subnet 10.0.1.0/24 is private in the sense that instances that are created inside it do not get a public IP
 * Subnet 10.0.2.0/24 is public in the sense that instances which are created inside it get a public and a private IP
-* All the nodes related to the kubernetes cluster are located inside the private subnet
+* All the nodes related to the kubernetes cluster (represented with green boxes) are located inside the private subnet
 * Two route tables are created: one associated to the public subnet and one associated to the private subnet
 * The default route of the private subnet is the NAT gateway which resides in the public subnet 
 * The default route of the public subnet is the Internet Gateway (IGW)
