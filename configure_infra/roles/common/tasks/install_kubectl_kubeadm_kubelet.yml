@@ -34,6 +34,10 @@
     state: latest
     update_cache: true
 
+# We configure hold on kubeadm, kubectl and kubelet packages 
+# in order to make sure that are not accidentally
+# upgrated or removed  
+
 - name: Hold kubeadm
   dpkg_selections:
     name: kubeadm
