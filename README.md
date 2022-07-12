@@ -23,7 +23,7 @@ It's up to you whether you run the Ansible scripts or install kubernetes manuall
 Access to the EC2 instances is needed both for humans and Ansible (which is used to install the kubernetes cluster). Although the AWS security groups where the instances are placed do **not** include any ingress rule to allow SSH traffic (port 22); using SSH to connect to them is still possible thanks to AWS Systems Manager. Terraform installs SSM Agent on the instances. 
 
 ### Human Access<a name="human_access"></a>
-In order for a client (e.g. you local machine) to interact with them it needs to fullfil the below:
+In order for a client (e.g. you local machine) to ssh to the EC2 instances, it needs to fullfil the below:
 
 * Have AWS CLI installed: [Installation of AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 * Have the Session Manager plugin for the AWS CLI installed: [Install the Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html)
