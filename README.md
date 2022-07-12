@@ -44,6 +44,8 @@ region=<AWS_REGION>
 <br/><br/>
 You can connect using the command: ```ssh -i <KEY_PEM_FILE> <USER_NAME>@<INSTANCE_ID>```
 The ```USER_NAME``` of the kubernetes related nodes (i.e.: master node and worker nodes) is ```ubuntu```. The USER_NAME of the nginx server is ```ec2-user```. The ```KEY_PEM_FILE``` is the path pointing to the pem file of the key-pair that you need to generate as discussed in the [Prerequisites for working with the repo](#prerequisites) section.
+When terraform finishes its execution, it returns a bunch of outputs. Among those, you can find the instance id of the master node (```instance_id_master_node```), which you can use as follows to connect to the EC2 instace: ```ssh -i <KEY_PEM_FILE> ubuntu@<INSTANCE_ID_MASTER_NODE>```. Once you are connected as ubuntu user, you can switch to root with the command: ```sudo -i``` 
+
 
 ### Ansible Access
 When Ansible does not find an ```ansible.cfg``` file, it uses the defaults which means that it will use the configuration of ```~/.ssh/config``` for connecting via SSH to the hosts which needs to interact with. From that perspective, in order for Ansible to connect to the EC2 instances via SSH, all the points discussed in the section above ([Human Access](#human_access)) are still relevant. The playbooks themselves define the user that needs to be used, however, you still need to specify the ```KEY_PEM_FILE``` which is the pem file of the key-pair that you need to generate using AWS console as discussed in the [Prerequisites for working with the repo](#prerequisites) section.
