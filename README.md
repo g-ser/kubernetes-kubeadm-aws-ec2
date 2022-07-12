@@ -69,6 +69,9 @@ A high level view of the virtual infrastructure which will be created by the ter
 # Provision and configure the infrastructure
 
 ### Run terraform
+In the folder [provision_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/provision_infra/) run:
+```terraform apply```
 
 ### Run Ansible
-```ansible-playbook --private-key <KEY_PEM_FILE> -i inventory git-setup.yml```
+In the folder [configure_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/configure_infra/) run:
+```ansible-playbook --private-key <KEY_PEM_FILE> -i inventory kubernetes_cluster.yml```
