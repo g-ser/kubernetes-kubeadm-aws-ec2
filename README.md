@@ -68,6 +68,8 @@ A high level view of the virtual infrastructure which will be created by the ter
 
 # Provision and configure the infrastructure
 
+Note that terraform generates a file into [kubernetes-kubeadm-aws-ec2/configure_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/configure_infra/) which will be used as the inventory for Ansible
+
 ### Run terraform
 In the folder [provision_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/provision_infra/) run:
 ```terraform apply```
