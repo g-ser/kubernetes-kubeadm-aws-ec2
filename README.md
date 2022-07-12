@@ -4,7 +4,7 @@ This repo contains terraform configuration files for provisioning a set of EC2 i
 
 * Terraform configuration files which can be found in [provision_infra](/provision_infra/) folder and are responsible for provisioning the virtual infrastructure on AWS
 
-* Ansible scripts which can be found in [configure_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/configure_infra/) folder and are responsible for installing Kubernetes on the EC2 instances using kubeadm
+* Ansible scripts which can be found in [configure_infra](/configure_infra/) folder and are responsible for installing Kubernetes on the EC2 instances using kubeadm
 
 It's up to you whether you run the Ansible scripts or install kubernetes manually. In case you want to go with the manual installation, you can find the relevant instructions here: [Installation of kubernetes with kubeadm](assets/documents/install_k8s_with_kubeadm.md).
 
@@ -71,9 +71,9 @@ A high level view of the virtual infrastructure which will be created by the ter
 Note that terraform generates a file into [kubernetes-kubeadm-aws-ec2/configure_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/configure_infra/) which will be used as the inventory for Ansible
 
 ### Run terraform
-In the folder [provision_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/provision_infra/) run:
+In the folder [provision_infra](/provision_infra/) run:
 ```terraform apply```
 
 ### Run Ansible<a name="run_ansible"></a>
-In the folder [configure_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/configure_infra/) run:
+In the folder [configure_infra](/configure_infra/) run:
 ```ansible-playbook --private-key <KEY_PEM_FILE> -i inventory kubernetes_cluster.yml```
