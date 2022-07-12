@@ -10,15 +10,15 @@ It's up to you whether you run the Ansible scripts or install kubernetes manuall
 
 **Note: The virtual infrastructure provisioned by the configuration files of this repository, is intended to be used ONLY for training purposes!**
 
-# Prerequisites for working with the repo
+# Prerequisites for working with the repo<a name="prerequisites"></a>
 
 * Your local machine, has to have terraform installed so you can run the terraform configuration files included in this repository. This repo has been tested with terraform 1.2.4
 * Since Ansible is used for the configuration of the EC2 instances (i.e. for installing kubernetes with kubeadm), you also need to have Ansible installed on your local machine which will play the role of an Ansible control node. This repo has been tested with Ansible 2.13.1
 * You need to use AWS console (prior to running the terraform configuration files) to generate a key-pair whose name you need to specify in the ``provision_infra/terraform.tfvars`` file (variable name is ```key_name```)
 * You need to generate a pair of aws_access_key_id-aws_secret_access_key for you user on AWS using the console of AWS and provide the path where the credentials are stored to the variable called ```credentials_location``` which is in ```/provision_infra/terraform.tfvars``` file
-* Go through the section [Accessing the EC2 instances](#Accessing the EC2 instances) and make sure that you have [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), as well as [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html) and the proper configuration in ```~/.ssh/config``` and ```~/.aws/config``` files. 
+* Go through the section [Accessing the EC2 instances](#access_instances) and make sure that you have [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), as well as [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html) and the proper configuration in ```~/.ssh/config``` and ```~/.aws/config``` files. 
 
-# Accessing the EC2 instances
+# Accessing the EC2 instances<a name="access_instances"></a>
 
 Access to the EC2 instances is needed both for humans and Ansible (which is used to install the kubernetes cluster). Although the AWS security groups where the instances are placed do **not** include any ingress rule to allow SSH traffic (port 22); using SSH to connect to them is still possible thanks to AWS Systems Manager. Terraform installs SSM Agent on the instances. 
 
@@ -43,10 +43,10 @@ region=<AWS_REGION>
 ```
 <br/><br/>
 You can connect using the command: ```ssh -i <KEY_PEM_FILE> <USER_NAME>@<INSTANCE_ID>```
-The ```USER_NAME``` of the kubernetes related nodes (i.e.: master node and worker nodes) is ```ubuntu```. The USER_NAME of the nginx server is ```ec2-user```. The ```KEY_PEM_FILE``` is the path pointing to the pem file of the key-pair that you need to generate as discussed in the [Prerequisites for working with the repo](#Prerequisites for working with the repo) section.
+The ```USER_NAME``` of the kubernetes related nodes (i.e.: master node and worker nodes) is ```ubuntu```. The USER_NAME of the nginx server is ```ec2-user```. The ```KEY_PEM_FILE``` is the path pointing to the pem file of the key-pair that you need to generate as discussed in the [Prerequisites for working with the repo](#prerequisites) section.
 
 ### Ansible Access
-When Ansible does not find an ```ansible.cfg``` file, it uses the defaults which means that it will use the configuration of ```~/.ssh/config``` for connecting via SSH to the hosts which needs to interact with. From that perspective, in order for Ansible to connect to the EC2 instances via SSH, all the points discussed in the section above ([Human Access](#human_access)) are still relevant. The playbooks themselves define the user that needs to be used, however, you still need to specify the ```KEY_PEM_FILE``` which is the pem file of the key-pair that you need to generate using AWS console as discussed in the [Prerequisites for working with the repo](#Prerequisites for working with the repo) section.
+When Ansible does not find an ```ansible.cfg``` file, it uses the defaults which means that it will use the configuration of ```~/.ssh/config``` for connecting via SSH to the hosts which needs to interact with. From that perspective, in order for Ansible to connect to the EC2 instances via SSH, all the points discussed in the section above ([Human Access](#human_access)) are still relevant. The playbooks themselves define the user that needs to be used, however, you still need to specify the ```KEY_PEM_FILE``` which is the pem file of the key-pair that you need to generate using AWS console as discussed in the [Prerequisites for working with the repo](#prerequisites) section.
 For running the playbook of this repository follow the instructions in the section below: [Run Ansible](#run_ansible)
 
 
