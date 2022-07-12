@@ -1,12 +1,10 @@
 # What's inside this repo
 
-This repo contains terraform configuration files for provisioning a set of EC2 instances and other relevant resources which can be configured with the ansible scripts of the current repository to make a Kubernetes cluster. That is, the repo consists of the terraform configuration files which can be found in [provision_infra](kubernetes-kubeadm-aws-ec2/src/master/provision_infra) folder  
+This repo contains terraform configuration files for provisioning a set of EC2 instances and other relevant resources which can be configured with the ansible scripts of the current repository to make a Kubernetes cluster. That is, the repo consists of the:
+* Terraform configuration files which can be found in [provision_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/provision_infra/) folder and are responsible for provisioning the virtual infrastructure on AWS
+* Ansible scripts which can be found in [configure_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/configure_infra/) folder and are responsible for installing Kubernetes on the EC2 instances using kubeadm
 
-which can be used later to install a kubernetes cluster using kubeadm.
-
-At the moment, the terraform configuration files of this repo take care of setting up the EC2 instances on AWS and they do **NOT** install kubernetes.
-
-After running terraform and having the EC2 related infrastructure in place, you can proceed installing kubernetes with kubeadm by following the steps described in the section of this file called [Installation of kubernetes with kubeadm](#Installation of kubernetes with kubeadm).
+It's up to you whether you run the Ansible scripts or install kubernetes manually. In case you want to go with the manual installation, you can find the relevant instructions here: [Installation of kubernetes with kubeadm](#Installation of kubernetes with kubeadm).
 
 **Note: The virtual infrastructure provisioned by the configuration files of this repository, is intended to be used ONLY for training purposes!**
 
