@@ -1,6 +1,8 @@
 # What's inside this repo
 
-This repo contains terraform configuration files for provisioning a set of EC2 instances (and other relevant resources) which can be used later to install a kubernetes cluster using kubeadm.
+This repo contains terraform configuration files for provisioning a set of EC2 instances and other relevant resources which can be configured with the ansible scripts of the current repository to make a Kubernetes cluster. That is, the repo consists of the terraform configuration files which can be found in [provision_infra](kubernetes-kubeadm-aws-ec2/src/master/provision_infra) folder  
+
+which can be used later to install a kubernetes cluster using kubeadm.
 
 At the moment, the terraform configuration files of this repo take care of setting up the EC2 instances on AWS and they do **NOT** install kubernetes.
 
