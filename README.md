@@ -8,7 +8,7 @@ This repo contains terraform configuration files for provisioning a set of EC2 i
 
 It's up to you whether you run the Ansible scripts or install kubernetes manually. In case you want to go with the manual installation, you can find the relevant instructions here: [Installation of kubernetes with kubeadm](assets/documents/install_k8s_with_kubeadm.md).
 
-**Note: The virtual infrastructure provisioned by the configuration files of this repository, is intended to be used ONLY for training purposes!**
+**Note: The kubernetes infrastructure provisioned using the source code of this repository, is intended to be used ONLY for training purposes!**
 
 # Prerequisites for working with the repo<a name="prerequisites"></a>
 
