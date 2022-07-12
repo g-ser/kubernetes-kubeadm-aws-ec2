@@ -2,7 +2,7 @@
 
 This repo contains terraform configuration files for provisioning a set of EC2 instances and other relevant resources which can be configured with the ansible scripts of the current repository to make a Kubernetes cluster. That is, the repo consists of the:
 
-* Terraform configuration files which can be found in [provision_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/provision_infra/) folder and are responsible for provisioning the virtual infrastructure on AWS
+* Terraform configuration files which can be found in [provision_infra](/provision_infra/) folder and are responsible for provisioning the virtual infrastructure on AWS
 
 * Ansible scripts which can be found in [configure_infra](/georgios_serafeim/kubernetes-kubeadm-aws-ec2/src/master/configure_infra/) folder and are responsible for installing Kubernetes on the EC2 instances using kubeadm
 
