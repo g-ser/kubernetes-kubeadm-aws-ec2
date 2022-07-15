@@ -1,17 +1,17 @@
-apiVersion: kubeadm.k8s.io/v1beta3
+apiVersion: kubeadm.k8s.io/v1beta2
 kind: InitConfiguration
 nodeRegistration:
   criSocket: "unix:///var/run/cri-dockerd.sock"
 localAPIEndpoint:
-  advertiseAddress: {{ advertise_address }}
+  advertiseAddress: "{{ advertise_address }}"
   bindPort: 6443
 ---
-apiVersion: kubeadm.k8s.io/v1beta3
+apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
-kubernetesVersion: v{{ kubeadm_version.stdout_lines[0] }}
+kubernetesVersion: "v{{ kubeadm_version.stdout_lines[0] }}"
 networking:
-  podSubnet: {{ pod_subnet }} 
+  podSubnet: "{{ pod_subnet }}" 
 ---
-kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
 cgroupDriver: systemd
