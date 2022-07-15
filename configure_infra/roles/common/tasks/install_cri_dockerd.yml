@@ -28,11 +28,12 @@
     dest: /etc/systemd/system
     remote_src: yes
 
-- name: replace line /usr/bin/cri-dockerd with /usr/local/bin/cri-dockerd
-  replace: 
-    path: /etc/systemd/system/cri-docker.service 
-    regexp: '/usr/bin/cri-dockerd' 
-    replace: '/usr/local/bin/cri-dockerd'
+- name: Replace file starting with ExecStart in docker service config file
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/system/cri-docker.service
+    regexp: 'ExecStart'
+    line: ExecStart=/usr/local/bin/cri-dockerd --network-plugin=cni --cni-bin-dir=/opt/cni/bin --cni-conf-dir=/etc/cni/net.d --container-runtime-endpoint fd://
+    backrefs: yes
 
 - name: Just force systemd to reread configs 
   ansible.builtin.systemd:
