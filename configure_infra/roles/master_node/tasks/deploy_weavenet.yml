@@ -1,7 +1,7 @@
 ---
 - name: retrieve weavenet file
   get_url:
-    url: https://cloud.weave.works/k8s/net?k8s-version=1.24.2
+    url: https://cloud.weave.works/k8s/net?k8s-version={{ kubeadm_version.stdout_lines[0] }}&env.IPALLOC_RANGE={{ pod_subnet }}
     dest: /tmp
 
 - name: create deployment
