@@ -65,7 +65,11 @@ A high level view of the virtual infrastructure which will be created by the ter
 * Two route tables are created: one associated to the public subnet and one associated to the private subnet
 * The default route of the private subnet is the NAT gateway which resides in the public subnet 
 * The default route of the public subnet is the Internet Gateway (IGW)
-* The master node of the kubernetes cluster and the worker nodes are in two different security groups which allow all the icmp traffic and the traffic that a kubernetes cluster generates to operate: ([ports and protocols used by Kubernetes components](https://kubernetes.io/docs/reference/ports-and-protocols/))
+* The master node of the kubernetes cluster and the worker nodes are in two different security groups:
+    * both security groups allow traffic originating from the private subnet, that a kubernetes cluster generates to operate: ([ports and protocols used by Kubernetes components](https://kubernetes.io/docs/reference/ports-and-protocols/))
+    * the security group where the worker nodes resides allows all icmp traffic originated from the private subnet
+    * the security group where the master node resides allows all icmp traffic originated from the private and public subnets
+    * both security groups allow traffic originating from the private subnet whose target is tcp port 6783 and udp ports 6783-6784. Those are the which the ports that weavenet uses as control and data ports
 * No configuration is applied to AWS's default Network ACL which comes when creating the VPC which means that it does not block any traffic.
 
 # Provision and configure the infrastructure
