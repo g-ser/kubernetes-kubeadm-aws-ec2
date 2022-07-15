@@ -151,6 +151,22 @@ resource "aws_security_group" "master_node" {
   description = "Allow inbound traffic needed for k8s control plane to operate"
   vpc_id      = aws_vpc.k8s_vpc.id
   
+  ingress{
+    description      = "Weavenet control port"
+    from_port        = 6783
+    to_port          = 6783
+    protocol         = "tcp"
+    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+  }
+
+  ingress{
+    description      = "Weavenet data ports"
+    from_port        = 6783
+    to_port          = 6784
+    protocol         = "udp"
+    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+  }
+
   ingress {
     description      = "Allow all icmp traffic from the private subnet"
     from_port        = -1
@@ -252,6 +268,22 @@ resource "aws_security_group" "worker_node" {
     from_port        = -1
     to_port          = -1
     protocol         = "icmp"
+    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+  }
+
+  ingress{
+    description      = "Weavenet control port"
+    from_port        = 6783
+    to_port          = 6783
+    protocol         = "tcp"
+    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+  }
+
+  ingress{
+    description      = "Weavenet data ports"
+    from_port        = 6783
+    to_port          = 6784
+    protocol         = "udp"
     cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
