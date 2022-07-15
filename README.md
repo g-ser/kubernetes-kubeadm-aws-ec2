@@ -10,6 +10,11 @@ It's up to you whether you run the Ansible scripts or install kubernetes manuall
 
 **Note: The kubernetes infrastructure provisioned using the source code of this repository, is intended to be used ONLY for training purposes!**
 
+# Basic software components used
+
+* The container engine that Ansible scripts install is docker
+* The network plugin of the kubernetes cluster that is installed by the Ansible scripts is [weavenet](https://www.weave.works/docs/net/latest/overview/)
+
 # Prerequisites for working with the repo<a name="prerequisites"></a>
 
 * Your local machine, has to have terraform installed so you can run the terraform configuration files included in this repository. This repo has been tested with terraform 1.2.4
