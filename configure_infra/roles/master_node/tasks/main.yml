@@ -3,3 +3,10 @@
   import_tasks: initialize_kubeadm.yml
 - name: Deploy weavenet
   import_tasks: deploy_weavenet.yml
+- name: Install etcd-client
+  apt:
+    pkg: etcd-client
+    state: latest
+    update_cache: true
+- name: Enable kubectl autocompletion
+  ansible.builtin.shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
