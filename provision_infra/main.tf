@@ -303,6 +303,20 @@ resource "aws_security_group" "worker_node" {
     cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
+  # The rule below allows kubernetes master node to ssh to worker nodes. 
+  # The k8s cluster itself does not need this rule to operate. This rule was
+  # added, to work on a CKA exam scenario where I needed to perform etcd backup
+  # using the etcdctl from one of the worker nodes which means that the etcd 
+  # pki certificates had to be copied from the master node to the worker node 
+  # using scp (scp's default port is tcp 22) 
+  ingress {
+    description      = "Allow ssh only from the control plane node of the cluster"
+    from_port        = 22
+    to_port          = 22
+    protocol         = "tcp"
+    cidr_blocks      = formatlist("%s/32", var.master_node_ip_address)
+  }
+
   egress {
     from_port        = 0
     to_port          = 0
