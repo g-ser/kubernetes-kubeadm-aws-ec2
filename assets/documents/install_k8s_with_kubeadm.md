@@ -117,15 +117,15 @@ Download Google Cloud public signing key:
 Add the kubernetes apt repository:  
 `echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list`
 
-Disable swap:
+Disable swap:  
 `swapoff -a`
 
 Update apt package index, install kubelet, kubeadm and kubectl, and pin their version:  
 `sudo apt-get update`
 
-`sudo apt-get install -y kubelet=1.24.3-00`
-`sudo apt-get install -y kubeadm=1.24.3-00`
-`sudo apt-get install -y kubectl=1.24.3-00`
+`sudo apt-get install -y kubelet=1.24.3-00`  
+`sudo apt-get install -y kubeadm=1.24.3-00`  
+`sudo apt-get install -y kubectl=1.24.3-00`  
 
 `sudo apt-mark hold kubelet kubeadm kubectl`
 <br/><br/>
