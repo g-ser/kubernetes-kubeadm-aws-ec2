@@ -1,14 +1,4 @@
 ---
-- name: Use command to pull kubeadm installed version
-  shell: apt list kubeadm | grep -o -P '(?<=now ).*(?=-.* amd64 \[installed\])'
-  register: kubeadm_version
-  args:
-    warn: no
-
-- name: Show kubeadm version
-  debug:
-    var: kubeadm_version.stdout_lines[0]
-
 - name: copy kubeadm-config.yaml from ansible control node to k8s master node
   template:
     src: kubeadm-config.yaml

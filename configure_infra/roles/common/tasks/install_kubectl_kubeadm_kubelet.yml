@@ -28,10 +28,25 @@
     force_apt_get: yes
     cache_valid_time: 3600
 
-- name: Update apt and install kubelet, kubeadm and kubectl
-  apt:
-    name: ['kubelet', 'kubeadm', 'kubectl']
-    state: latest
+- name: Disable Swap Memory
+  shell: swapoff -a
+
+- name: Install kubelet
+  ansible.builtin.apt:
+    name: kubelet={{ kubernetes_version }}
+    state: present
+    update_cache: true
+
+- name: Install kubeadm
+  ansible.builtin.apt:
+    name: kubeadm={{ kubernetes_version }}
+    state: present
+    update_cache: true
+
+- name: Install kubectl
+  ansible.builtin.apt:
+    name: kubectl={{ kubernetes_version }}
+    state: present
     update_cache: true
 
 # We configure hold on kubeadm, kubectl and kubelet packages 
