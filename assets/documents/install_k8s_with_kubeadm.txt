@@ -127,7 +127,7 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 
 # deploy a pod network to the cluster (weavenet) in this case
 
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=1.24.3-00"
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=1.24.3-00&env.IPALLOC_RANGE=10.244.0.0/16"
 
 # join the nodes (the commands below should run on each WORKER node)
 
