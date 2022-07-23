@@ -168,4 +168,4 @@ export kubeconfig:
 <br/><br/>
 #### Join the nodes (the command below should run on each WORKER node only)
 
-`kubeadm join 10.0.1.4:6443 --token <TOKEN> --discovery-token-ca-cert-hash <DISCOVERY_TOKEN_CA_CERT> --cri-socket unix:///var/run/cri-dockerd.sock`
+`kubeadm join 10.0.1.4:6443 --token <TOKEN> --discovery-token-ca-cert-hash <DISCOVERY_TOKEN_CA_CERT_HASH> --cri-socket unix:///var/run/cri-dockerd.sock`
