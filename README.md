@@ -52,7 +52,7 @@ region=<AWS_REGION>
 <br/><br/>
 You can connect using the command: ```ssh -i <KEY_PEM_FILE> <USER_NAME>@<INSTANCE_ID>```
 The ```USER_NAME``` of the kubernetes related nodes (i.e.: master node and worker nodes) is ```ubuntu```. The USER_NAME of the nginx server is ```ec2-user```. The ```KEY_PEM_FILE``` is the path pointing to the pem file of the key-pair that you need to generate as discussed in the [Prerequisites for working with the repo](#prerequisites) section.
-When terraform finishes its execution, it returns a bunch of outputs. Among those, you can find the instance id of the master node (```instance_id_master_node```), which you can use as follows to connect to the EC2 instace: ```ssh -i <KEY_PEM_FILE> ubuntu@<INSTANCE_ID_MASTER_NODE>```. Once you are connected as ```ubuntu``` user, you can switch to ```root``` with the command: ```sudo -i``` 
+When terraform finishes its execution, it returns a bunch of outputs. Among those, you can find the instance id of the master node (```instance_id_master_node```), which you can use as follows to connect to the EC2 instace: ```ssh -i <KEY_PEM_FILE> ubuntu@<INSTANCE_ID_MASTER_NODE>```. Once you are connected as ```ubuntu``` user, you can switch to ```root``` with the command: ```sudo -i```. However, if you run the Ansible scripts of this repo, you should be able to run kubectl commands as the ```ubuntu``` user  
 
 
 ### Ansible Access
