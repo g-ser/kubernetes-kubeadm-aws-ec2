@@ -10,3 +10,5 @@
     update_cache: true
 - name: Enable kubectl autocompletion
   ansible.builtin.shell: kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+- name: Make ubuntu user able to run kubectl commands
+  import_tasks: run_kubectl_with_ubuntu_user.yml

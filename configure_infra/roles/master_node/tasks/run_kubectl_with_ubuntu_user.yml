@@ -1,0 +1,27 @@
+---
+- name: Create .kube directory under /home/ubuntu
+  file:
+    path: /home/ubuntu/.kube
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+
+- name: Copy config file from /etc/kubernetes to /home/ubuntu/.kube
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/ubuntu/.kube/config
+    remote_src: yes
+    owner: ubuntu
+    group: ubuntu
+
+- name: Update bashrc of ubuntu user
+  lineinfile:
+    dest: /home/ubuntu/.bashrc
+    line: "export KUBECONFIG='/home/ubuntu/.kube/config'"
+
+- name: Create .bash_profile file
+  copy:
+    content: ". ~/.bashrc"
+    dest: /home/ubuntu/.bash_profile
+    force: no
+
