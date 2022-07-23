@@ -164,7 +164,7 @@ export kubeconfig:
 <br/><br/>
 #### Deploy a pod network to the cluster (weavenet in this case) (only on master node)
 
-`kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=1.24.3"`
+`kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=1.24.3-00"`
 <br/><br/>
 #### Join the nodes (the command below should run on each WORKER node only)
 
