@@ -13,7 +13,7 @@ Once you provision the AWS infrastructure with terraform **and** run the Ansible
 * 3 EC2 AWS instances (1 master node & 2 worker nodes) running Ubuntu 22.04 LTS
 * Each of the 3 nodes of the cluster will have docker installed as the container engine.  [Cri-dockerd](https://github.com/Mirantis/cri-dockerd) is also installed since kubernetes cannot integrate natively with docker any more, so cri-dockerd is needed to act as the middleman.
 * The network plugin of the kubernetes cluster that is installed by the Ansible scripts is [weavenet](https://www.weave.works/docs/net/latest/overview/)
-* Kubernetes version is 1.24.3. The version is controlled by the variable ```kubernetes_version``` in file [configure_infra/group_vars/all](configure_infra/group_vars/all). You can change the version in that file in case you want to install a newer, but keep in mind that the Ansible scripts were only tested with 1.24.3-00.
+* Kubernetes version is 1.25.0. The version is controlled by the variable ```kubernetes_version``` in file [configure_infra/group_vars/all](configure_infra/group_vars/all). You can change the version in that file in case you want to install a newer, but keep in mind that the Ansible scripts were only tested with 1.25.0-00.
 
 **Note: The kubernetes infrastructure provisioned using the source code of this repository, is intended to be used ONLY for training purposes!**
 

@@ -123,9 +123,9 @@ Disable swap:
 Update apt package index, install kubelet, kubeadm and kubectl, and pin their version:  
 `sudo apt-get update`
 
-`sudo apt-get install -y kubelet=1.24.3-00`  
-`sudo apt-get install -y kubeadm=1.24.3-00`  
-`sudo apt-get install -y kubectl=1.24.3-00`  
+`sudo apt-get install -y kubelet=1.25.0-00`  
+`sudo apt-get install -y kubeadm=1.25.0-00`  
+`sudo apt-get install -y kubectl=1.25.0-00`  
 
 `sudo apt-mark hold kubelet kubeadm kubectl`
 <br/><br/>
@@ -144,7 +144,7 @@ localAPIEndpoint:
 ---
 apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
-kubernetesVersion: v1.24.3
+kubernetesVersion: v1.25.0
 networking:
   podSubnet: "10.244.0.0/16"
 ---
@@ -164,7 +164,7 @@ export kubeconfig:
 <br/><br/>
 #### Deploy a pod network to the cluster (weavenet in this case) (only on master node)
 
-`kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=1.24.3-00&env.IPALLOC_RANGE=10.244.0.0/16"`
+`kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=1.25.0-00&env.IPALLOC_RANGE=10.244.0.0/16"`
 
 <br/><br/>
 #### Join the nodes (the command below should run on each WORKER node only)
