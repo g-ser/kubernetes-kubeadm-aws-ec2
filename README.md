@@ -8,12 +8,14 @@ This repo contains terraform configuration files for provisioning a set of EC2 i
 
 It's up to you whether you run the Ansible scripts or install kubernetes manually. In case you want to go with the manual installation, you can find the relevant instructions here: [Installation of kubernetes with kubeadm](assets/documents/install_k8s_with_kubeadm.md).
 
-Once you provision the AWS infrastructure with terraform **and** run the Ansible scripts to install kubernetes, you will end up with a kubernetes cluster which comprises the software components listed below:
+If you run both the terraform configuration files and the ansible scripts (check [Provision and configure the infrastructure](#run_scripts) for instructions), they will create a kubernetes cluster for you which comprises the software components listed below:
 
 * 3 EC2 AWS instances (1 master node & 2 worker nodes) running Ubuntu 22.04 LTS
 * Each of the 3 nodes of the cluster will have docker installed as the container engine.  [Cri-dockerd](https://github.com/Mirantis/cri-dockerd) is also installed since kubernetes cannot integrate natively with docker any more, so cri-dockerd is needed to act as the middleman.
 * The network plugin of the kubernetes cluster that is installed by the Ansible scripts is [weavenet](https://www.weave.works/docs/net/latest/overview/)
-* Kubernetes version is 1.25.0. The version is controlled by the variable ```kubernetes_version``` in file [configure_infra/group_vars/all](configure_infra/group_vars/all). You can change the version in that file in case you want to install a newer, but keep in mind that the Ansible scripts were only tested with 1.25.0-00.
+* Kubernetes version is 1.25.0. The version is controlled by the variable ```kubernetes_version``` in file [configure_infra/group_vars/all](configure_infra/group_vars/all). You can change the version in that file in case you want to install a new one, but keep in mind that the Ansible scripts were only tested with 1.25.0-00.
+* A NAT gateway (check illustration of section [Architecture](#architecture)), which is responsible for allowing the nodes of the kubernetes cluster which are located in a private subnet to access services located in the Internet (e.g. for managing software packages using yum)
+* A VM located in the public subnet with nginx server installed, configured to act as a reserve proxy for exposing the applications running on the kubernetes cluster to the outside world (check section [Expose applications to the Internet](#expose_apps))  
 
 **Note: The kubernetes infrastructure provisioned using the source code of this repository, is intended to be used ONLY for training purposes!**
 
@@ -60,7 +62,7 @@ When Ansible does not find an ```ansible.cfg``` file, it uses the defaults which
 For running the playbook of this repository follow the instructions in the section below: [Run Ansible](#run_ansible)
 
 
-# Architecture
+# Architecture<a name="architecture"></a>
 
 A high level view of the virtual infrastructure which will be created by the terraform configuration files included in this repo can be seen in the picture below: 
 
@@ -80,7 +82,7 @@ A high level view of the virtual infrastructure which will be created by the ter
     * both security groups allow traffic originating from the private subnet whose target is tcp port 6783 and udp ports 6783-6784. Since weavenet is used as the network plugin of the cluster, we need to open those ports due to the fact that weavenet uses them as control and data ports.
 * No configuration is applied to AWS's default Network ACL which comes when creating the VPC which means that it does not block any traffic.
 
-# Provision and configure the infrastructure
+# Provision and configure the infrastructure<a name="run_scripts"></a>
 
 Note that terraform generates a file into [kubernetes-kubeadm-aws-ec2/configure_infra](/configure_infra/) called ```inventory``` which will be used as the inventory for Ansible
 
@@ -91,3 +93,5 @@ In the folder [provision_infra](/provision_infra/) run:
 ### Run Ansible<a name="run_ansible"></a>
 In the folder [configure_infra](/configure_infra/) run:
 ```ansible-playbook --private-key <KEY_PEM_FILE> -i inventory kubernetes_cluster.yml```
+
+# Expose applications to the Internet<a name="expose_apps"></a>
