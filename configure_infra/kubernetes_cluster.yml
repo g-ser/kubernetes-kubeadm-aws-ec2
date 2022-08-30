@@ -3,7 +3,7 @@
   become: yes
   remote_user: ubuntu
   roles:
-    - common
+    - all_k8s_nodes
 
 - hosts: master_node
   become: yes
@@ -20,3 +20,15 @@
   remote_user: ubuntu
   roles:
     - worker_nodes
+
+- hosts: nginx_server
+  become: yes
+  remote_user: ec2-user
+  roles:
+    - nginx_server
+
+- hosts: master_node
+  become: yes
+  remote_user: ubuntu
+  roles:
+    - ingress

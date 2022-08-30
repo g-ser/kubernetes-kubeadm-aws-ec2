@@ -1,0 +1,7 @@
+---
+- name: copy ingress-resource.yaml file
+  template:
+    src: ingress-resource.yaml
+    dest: /tmp
+- name: create ingress resource
+  ansible.builtin.shell: kubectl apply -f /tmp/ingress-resource.yaml

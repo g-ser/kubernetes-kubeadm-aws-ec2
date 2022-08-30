@@ -300,8 +300,18 @@ resource "aws_security_group" "worker_node" {
     from_port        = 30000
     to_port          = 32767
     protocol         = "tcp"
+    cidr_blocks      = [aws_subnet.k8s_public_subnet.cidr_block]
+  }
+
+  ingress {
+    description      = "NodePort Services"
+    from_port        = 30000
+    to_port          = 32767
+    protocol         = "tcp"
     cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
   }
+
+
 
   # The rule below allows kubernetes master node to ssh to worker nodes. 
   # The k8s cluster itself does not need this rule to operate. This rule was

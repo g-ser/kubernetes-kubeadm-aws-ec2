@@ -1,0 +1,23 @@
+---
+- name: Enable nginx for amazon linux
+  shell: "amazon-linux-extras enable nginx1"
+- name: clean yum metadata cache
+  command: yum clean metadata
+- name: Install nginx web server
+  yum:
+    name: nginx
+    state: installed
+    update_cache: yes
+- name: Creating a proxy_pass.conf file with content
+  copy:
+    dest: "/etc/nginx/conf.d/proxy_pass.conf"
+    content: |
+      server{location / {proxy_pass http://{{worker_nodes_ips[0]}}:{{ingress_exposed_node_port}}/;}}
+- name: Start service nginx
+  ansible.builtin.service:
+    name: nginx
+    state: started
+- name: Reload service nginx
+  ansible.builtin.systemd:
+    name: nginx.service
+    state: reloaded

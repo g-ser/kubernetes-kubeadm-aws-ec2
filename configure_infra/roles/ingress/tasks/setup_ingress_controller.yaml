@@ -1,0 +1,16 @@
+---
+- name: copy setup_ingress_controller.yaml file
+  template:
+    src: nginx-ingress-controller.yaml
+    dest: /tmp
+- name: create ingress controller
+  ansible.builtin.shell: kubectl apply -f /tmp/nginx-ingress-controller.yaml
+- name: check that job ingress-nginx-admission-create is completed
+  ansible.builtin.shell: kubectl wait --for=condition=complete job/ingress-nginx-admission-create -n ingress-nginx --timeout=60s
+- name: check that job ingress-nginx-admission-patch is completed
+  ansible.builtin.shell: kubectl wait --for=condition=complete job/ingress-nginx-admission-patch -n ingress-nginx --timeout=60s
+- name: check that deployment ingress-nginx-controller is available
+  ansible.builtin.shell: kubectl wait deployment -n ingress-nginx ingress-nginx-controller --for condition=Available=True --timeout=60s
+
+  
+  

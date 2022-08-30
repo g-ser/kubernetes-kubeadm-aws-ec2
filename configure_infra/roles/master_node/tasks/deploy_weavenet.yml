@@ -4,5 +4,5 @@
     url: https://cloud.weave.works/k8s/net?k8s-version={{ kubernetes_version }}&env.IPALLOC_RANGE={{ pod_subnet }}
     dest: /tmp
 
-- name: create deployment
+- name: create weavenet deployment
   ansible.builtin.shell: kubectl apply -f /tmp/net.yaml

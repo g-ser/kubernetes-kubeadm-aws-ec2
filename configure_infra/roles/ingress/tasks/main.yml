@@ -1,0 +1,5 @@
+---
+- name: Set up ingress controller
+  import_tasks: setup_ingress_controller.yaml
+- name: Create an ingress resource for reference
+  import_tasks: ingress_resource.yaml

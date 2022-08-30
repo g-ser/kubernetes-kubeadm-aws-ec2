@@ -1,2 +1,6 @@
 ---
-kubernetes_version: "1.24.3-00"
+kubernetes_version: "1.25.0-00"
+ingress_exposed_node_port: "32451"
+worker_nodes_ips:
+  - 10.0.1.5
+  - 10.0.1.4
