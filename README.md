@@ -1,6 +1,10 @@
+# Motivation
+
+The purpose of this repo is to provision quickly a kubernetes cluster on AWS which can be used for training on kubernetes (e.g. using kubectl commands). I built it during my studies for the CKA (Certified Kubernetes Administrator) certification. Since the cluster can be created within minutes, it is ideal for experimenting with kubernetes without being worried about breaking the cluster (if that happens, you just need to tear it down and provision it again).
+
 # What's inside this repo<a name="repo_content"></a>
 
-This repo contains terraform configuration files for provisioning a set of EC2 instances and other relevant resources which can be configured with the ansible scripts of the current repository to make a Kubernetes cluster. That is, the repo consists of the:
+This repo contains terraform configuration files for provisioning a set of EC2 instances and other relevant resources which can be configured with the ansible scripts of the current repository to make a Kubernetes cluster. That is, the repo consists of:
 
 * Terraform configuration files which can be found in [provision_infra](/provision_infra/) folder and are responsible for provisioning the virtual infrastructure on AWS
 
@@ -100,7 +104,7 @@ The ansible scripts of this repo install NGINX ingress controller with ```kubect
 
 The ingress is made accessible outside the kubernetes cluster by being published as a node port (a better approach would be to publish it using an AWS load balancer but due to the fact that cloud native load balancers are costly and this infrastructure is meant to be used only for training purposes (i.e. for practicing with kubernetes), it was chosen to expose it using a node port). The node port used to expose the ingress is set to ```32451``` but it can be changed by modifying the variable ```ingress_exposed_node_port``` in file [configure_infra/group_vars/all](configure_infra/group_vars/all).
 
-As written in the [first section](#repo_content) of the current documentation, ansible configures a VM (located in the public subnet), to act as a reverse proxy. This is done by having ansible installing NGINX and then configure it to act as a reverse proxy (check [here](configure_infra/roles/nginx_server/tasks/main.yml)). That is, whatever http traffic reaches the public IP of the nginx server (its public IP is part of terraform's outputs), it is forwarded to the NGINX controller inside the kubernetes cluster through the node port 32451. Do not confuse the NGINX ingress controller which is part of the kubernetes cluster (deployed in the namespace called ```ingress-nginx```) with the NGINX Linux VM which resides in the public subnet and is depicted in the picture of section [Architecture](#architecture)
+As written in the [first section](#repo_content) of the current documentation, ansible configures a VM (located in the public subnet), to act as a reverse proxy. This is done by having ansible installing NGINX and then configure it to act as a reverse proxy (check [here](configure_infra/roles/nginx_server/tasks/main.yml)). That is, whatever http traffic reaches the public IP of the nginx server (its public IP is part of terraform's outputs), it is forwarded to the NGINX controller inside the kubernetes cluster through the node port ```32451```. Do not confuse the NGINX ingress controller which is part of the kubernetes cluster (deployed in the namespace called ```ingress-nginx```) with the NGINX Linux VM which resides in the public subnet and is depicted in the picture of section [Architecture](#architecture) with purple colour.
 
 After deploying the NGINX ingress controller, ansible proceeds with the creation of an ingress resource. In addition, it creates a deployment with a single web server pod to which all incoming traffic is forwarded through a service. This is done so you can use the web server application as a reference for exposing your own applications to the Internet. 
 
