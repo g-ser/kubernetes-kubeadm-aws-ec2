@@ -1,6 +1,6 @@
 # Motivation
 
-The purpose of this repo is to provision quickly a kubernetes cluster on AWS which can be used for training on kubernetes (e.g. using kubectl commands). I built it during my studies for the CKA (Certified Kubernetes Administrator) certification. Since the cluster can be created within minutes, it is ideal for experimenting with kubernetes without being worried about breaking the cluster (if that happens, you just need to tear it down and provision it again).
+The purpose of this repo is to provision quickly a kubernetes cluster on AWS which can be used for training on kubernetes (e.g. using kubectl commands). I built it during my studies for the CKA (Certified Kubernetes Administrator) certification. Since the cluster can be created within minutes, it is ideal for experimenting with kubernetes without being worried about breaking the cluster (if that happens, you just need to tear the cluster down (with terraform destroy) and provision it again).
 
 # What's inside this repo<a name="repo_content"></a>
 
