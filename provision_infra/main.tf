@@ -14,7 +14,7 @@ terraform {
 
 # Configure the AWS Provider and credentials
 provider "aws" {
-  region     = var.region
+  region                   = var.region
   shared_credentials_files = [var.credentials_location]
 }
 
@@ -39,8 +39,8 @@ resource "aws_subnet" "k8s_private_subnet" {
 
 # Create public subnet 
 resource "aws_subnet" "k8s_public_subnet" {
-  vpc_id     = aws_vpc.k8s_vpc.id
-  cidr_block = var.public_subnet_cidr_block
+  vpc_id                  = aws_vpc.k8s_vpc.id
+  cidr_block              = var.public_subnet_cidr_block
   map_public_ip_on_launch = true
   tags = {
     Name = "k8s_public_subnet"
@@ -64,7 +64,7 @@ resource "aws_route_table" "public_route_table" {
 
   route {
     ipv6_cidr_block = "::/0"
-    gateway_id = aws_internet_gateway.this.id
+    gateway_id      = aws_internet_gateway.this.id
   }
 
   tags = {
@@ -109,7 +109,7 @@ resource "aws_security_group" "public" {
   vpc_id      = aws_vpc.k8s_vpc.id
 
 
-   ingress {
+  ingress {
     description      = "HTTPS"
     from_port        = 443
     to_port          = 443
@@ -150,93 +150,93 @@ resource "aws_security_group" "master_node" {
   name        = "allow_ctrl_plane_traffic"
   description = "Allow inbound traffic needed for k8s control plane to operate"
   vpc_id      = aws_vpc.k8s_vpc.id
-  
-  ingress{
-    description      = "Weavenet control port"
-    from_port        = 6783
-    to_port          = 6783
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
-  }
 
-  ingress{
-    description      = "Weavenet data ports"
-    from_port        = 6783
-    to_port          = 6784
-    protocol         = "udp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+  ingress {
+    description = "Weavenet control port"
+    from_port   = 6783
+    to_port     = 6783
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "Allow all icmp traffic from the private subnet"
-    from_port        = -1
-    to_port          = -1
-    protocol         = "icmp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "Weavenet data ports"
+    from_port   = 6783
+    to_port     = 6784
+    protocol    = "udp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "Allow all icmp traffic from the public subnet"
-    from_port        = -1
-    to_port          = -1
-    protocol         = "icmp"
-    cidr_blocks      = [aws_subnet.k8s_public_subnet.cidr_block]
+    description = "Allow all icmp traffic from the private subnet"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "HTTPS from public subnet"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_public_subnet.cidr_block]
+    description = "Allow all icmp traffic from the public subnet"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = [aws_subnet.k8s_public_subnet.cidr_block]
   }
 
   ingress {
-    description      = "HTTP from public subnet"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_public_subnet.cidr_block]
+    description = "HTTPS from public subnet"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_public_subnet.cidr_block]
   }
 
   ingress {
-    description      = "Kubernetes API server"
-    from_port        = 6443
-    to_port          = 6443
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "HTTP from public subnet"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_public_subnet.cidr_block]
   }
 
   ingress {
-    description      = "etcd server client API"
-    from_port        = 2379
-    to_port          = 2380
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "Kubernetes API server"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "Kubelet API"
-    from_port        = 10250
-    to_port          = 10250
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "etcd server client API"
+    from_port   = 2379
+    to_port     = 2380
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "kube_scheduler"
-    from_port        = 10259
-    to_port          = 10259
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "Kubelet API"
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "kube_controller_manager"
-    from_port        = 10257
-    to_port          = 10257
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "kube_scheduler"
+    from_port   = 10259
+    to_port     = 10259
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
+  }
+
+  ingress {
+    description = "kube_controller_manager"
+    from_port   = 10257
+    to_port     = 10257
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   egress {
@@ -264,51 +264,51 @@ resource "aws_security_group" "worker_node" {
   vpc_id      = aws_vpc.k8s_vpc.id
 
   ingress {
-    description      = "Allow all icmp traffic"
-    from_port        = -1
-    to_port          = -1
-    protocol         = "icmp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
-  }
-
-  ingress{
-    description      = "Weavenet control port"
-    from_port        = 6783
-    to_port          = 6783
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
-  }
-
-  ingress{
-    description      = "Weavenet data ports"
-    from_port        = 6783
-    to_port          = 6784
-    protocol         = "udp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "Allow all icmp traffic"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "Kubelet API"
-    from_port        = 10250
-    to_port          = 10250
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "Weavenet control port"
+    from_port   = 6783
+    to_port     = 6783
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "NodePort Services"
-    from_port        = 30000
-    to_port          = 32767
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_public_subnet.cidr_block]
+    description = "Weavenet data ports"
+    from_port   = 6783
+    to_port     = 6784
+    protocol    = "udp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
   ingress {
-    description      = "NodePort Services"
-    from_port        = 30000
-    to_port          = 32767
-    protocol         = "tcp"
-    cidr_blocks      = [aws_subnet.k8s_private_subnet.cidr_block]
+    description = "Kubelet API"
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
+  }
+
+  ingress {
+    description = "NodePort Services"
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_public_subnet.cidr_block]
+  }
+
+  ingress {
+    description = "NodePort Services"
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "tcp"
+    cidr_blocks = [aws_subnet.k8s_private_subnet.cidr_block]
   }
 
 
@@ -320,11 +320,11 @@ resource "aws_security_group" "worker_node" {
   # pki certificates had to be copied from the master node to the worker node 
   # using scp (scp's default port is tcp 22) 
   ingress {
-    description      = "Allow ssh only from the control plane node of the cluster"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = formatlist("%s/32", var.master_node_ip_address)
+    description = "Allow ssh only from the control plane node of the cluster"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = formatlist("%s/32", var.master_node_ip_address)
   }
 
   egress {
@@ -348,30 +348,30 @@ resource "aws_security_group" "worker_node" {
 # will be placed in the worker node security group
 
 resource "aws_network_interface" "master_node_iface" {
-  subnet_id   = aws_subnet.k8s_private_subnet.id
-  private_ips = [var.master_node_ip_address]
+  subnet_id       = aws_subnet.k8s_private_subnet.id
+  private_ips     = [var.master_node_ip_address]
   security_groups = [aws_security_group.master_node.id]
-  
+
   tags = {
     Name = "master_node_iface"
   }
 }
 
 resource "aws_network_interface" "worker_node01_iface" {
-  subnet_id   = aws_subnet.k8s_private_subnet.id
-  private_ips = [var.worker_node01_ip_address]
+  subnet_id       = aws_subnet.k8s_private_subnet.id
+  private_ips     = [var.worker_node01_ip_address]
   security_groups = [aws_security_group.worker_node.id]
-  
+
   tags = {
     Name = "worker_node01_iface"
   }
 }
 
 resource "aws_network_interface" "worker_node02_iface" {
-  subnet_id   = aws_subnet.k8s_private_subnet.id
-  private_ips = [var.worker_node02_ip_address]
+  subnet_id       = aws_subnet.k8s_private_subnet.id
+  private_ips     = [var.worker_node02_ip_address]
   security_groups = [aws_security_group.worker_node.id]
-  
+
   tags = {
     Name = "worker_node02_iface"
   }
@@ -389,16 +389,16 @@ resource "aws_network_interface" "worker_node02_iface" {
 
 #create an aws elastic ip for the NAT gateway
 resource "aws_eip" "nat_gw_eip" {
-  vpc      = true
+  vpc        = true
   depends_on = [aws_internet_gateway.this]
 }
 
 # create the NAT gateway
 resource "aws_nat_gateway" "this" {
-  allocation_id = aws_eip.nat_gw_eip.id
-  subnet_id     = aws_subnet.k8s_public_subnet.id
+  allocation_id     = aws_eip.nat_gw_eip.id
+  subnet_id         = aws_subnet.k8s_public_subnet.id
   connectivity_type = "public"
-  
+
   tags = {
     Name = "nat_gw"
   }
@@ -413,50 +413,50 @@ resource "aws_nat_gateway" "this" {
 
 #create master node
 resource "aws_instance" "k8s_master_node" {
-  ami           = var.master_node_ami
-  key_name= var.key_name
+  ami      = var.master_node_ami
+  key_name = var.key_name
   network_interface {
     network_interface_id = aws_network_interface.master_node_iface.id
     device_index         = 0
   }
-  instance_type = var.master_node_instance_type
-  user_data = "${data.cloudinit_config.master_node.rendered}"
+  instance_type        = var.master_node_instance_type
+  user_data            = data.cloudinit_config.master_node.rendered
   iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
 
   tags = {
     Name = "k8s_master_node"
-  } 
+  }
 }
 
 #create worker node01
 resource "aws_instance" "k8s_worker_node01" {
-  ami           = var.worker_node_ami
-  key_name= var.key_name
+  ami      = var.worker_node_ami
+  key_name = var.key_name
   network_interface {
     network_interface_id = aws_network_interface.worker_node01_iface.id
     device_index         = 0
   }
-  instance_type = var.worker_node_instance_type
-  user_data = "${data.cloudinit_config.k8s_worker_node01.rendered}"
+  instance_type        = var.worker_node_instance_type
+  user_data            = data.cloudinit_config.k8s_worker_node01.rendered
   iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
 
   tags = {
     Name = "k8s_worker_node01"
-  } 
+  }
 }
 
 #create worker node02
 resource "aws_instance" "k8s_worker_node02" {
-  ami           = var.worker_node_ami
-  key_name= var.key_name
+  ami      = var.worker_node_ami
+  key_name = var.key_name
   network_interface {
     network_interface_id = aws_network_interface.worker_node02_iface.id
     device_index         = 0
   }
-  instance_type = var.worker_node_instance_type
-  user_data = "${data.cloudinit_config.k8s_worker_node02.rendered}"
-  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name 
-  
+  instance_type        = var.worker_node_instance_type
+  user_data            = data.cloudinit_config.k8s_worker_node02.rendered
+  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
+
   tags = {
     Name = "k8s_worker_node02"
   }
@@ -472,9 +472,9 @@ resource "aws_instance" "k8s_worker_node02" {
 
 # create the interface
 resource "aws_network_interface" "nginx_server_iface" {
-  subnet_id   = aws_subnet.k8s_public_subnet.id
+  subnet_id       = aws_subnet.k8s_public_subnet.id
   security_groups = [aws_security_group.public.id]
-  
+
   tags = {
     Name = "nginx_server_iface"
   }
@@ -482,15 +482,15 @@ resource "aws_network_interface" "nginx_server_iface" {
 
 # create the instance
 resource "aws_instance" "nginx_server" {
-  ami           = var.nginx_server_ami
-  key_name      = var.key_name
+  ami      = var.nginx_server_ami
+  key_name = var.key_name
   network_interface {
     network_interface_id = aws_network_interface.nginx_server_iface.id
     device_index         = 0
   }
-  instance_type = var.nginx_server_instance_type
-  user_data = "${data.cloudinit_config.nginx_server.rendered}"
-  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name 
+  instance_type        = var.nginx_server_instance_type
+  user_data            = data.cloudinit_config.nginx_server.rendered
+  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
   tags = {
     Name = "nginx_server"
   }
@@ -499,7 +499,7 @@ resource "aws_instance" "nginx_server" {
 # generate a file into kubernetes-kubeadm-aws-ec2/configure_infra
 # which will be used as the inventory for Ansible
 resource "local_file" "ansible_inventory" {
-    content  = <<-EOT
+  content  = <<-EOT
       [nginx_server]   
       ${aws_instance.nginx_server.id}
       [master_node]
@@ -508,5 +508,5 @@ resource "local_file" "ansible_inventory" {
       ${aws_instance.k8s_worker_node01.id}
       ${aws_instance.k8s_worker_node02.id}
     EOT
-    filename = "../configure_infra/inventory"
+  filename = "../configure_infra/inventory"
 }

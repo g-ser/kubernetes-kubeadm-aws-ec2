@@ -6,7 +6,7 @@ data "cloudinit_config" "master_node" {
 
   part {
     content_type = "text/x-shellscript"
-    content      =  data.local_file.ssm_agent.content
+    content      = data.local_file.ssm_agent.content
   }
 
 }
@@ -17,10 +17,10 @@ data "cloudinit_config" "k8s_worker_node01" {
   gzip          = true
   base64_encode = true
 
-  
+
   part {
     content_type = "text/x-shellscript"
-    content      =  data.local_file.ssm_agent.content
+    content      = data.local_file.ssm_agent.content
   }
 
 }
@@ -33,7 +33,7 @@ data "cloudinit_config" "k8s_worker_node02" {
 
   part {
     content_type = "text/x-shellscript"
-    content      =  data.local_file.ssm_agent.content
+    content      = data.local_file.ssm_agent.content
   }
 
 }
@@ -46,7 +46,7 @@ data "cloudinit_config" "nginx_server" {
 
   part {
     content_type = "text/x-shellscript"
-    content      =  data.local_file.ssm_agent.content
+    content      = data.local_file.ssm_agent.content
   }
 
 }

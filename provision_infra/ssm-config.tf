@@ -11,8 +11,8 @@ resource "aws_iam_role" "access_ec2" {
         Action = [
           "sts:AssumeRole",
         ]
-        Effect = "Allow"
-        Principal = {"Service": "ec2.amazonaws.com"}
+        Effect    = "Allow"
+        Principal = { "Service" : "ec2.amazonaws.com" }
       }
     ]
   })
@@ -35,7 +35,7 @@ resource "aws_iam_policy" "ssm_ssh" {
           "ssm:StartSession",
         ]
         Effect   = "Allow"
-        Resource =  ["arn:aws:ec2:*:*:instance/*","arn:aws:ssm:*:*:document/AWS-StartSSHSession"]
+        Resource = ["arn:aws:ec2:*:*:instance/*", "arn:aws:ssm:*:*:document/AWS-StartSSHSession"]
       },
     ]
   })
@@ -51,7 +51,7 @@ locals {
 # assign IAM policies to role
 
 resource "aws_iam_role_policy_attachment" "ssm_policy" {
-  for_each = local.iam_policies
+  for_each   = local.iam_policies
   role       = aws_iam_role.access_ec2.name
   policy_arn = each.value
 }
