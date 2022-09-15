@@ -1,9 +1,11 @@
-# This terraform script creates a k8s cluster on AWS using kubeadm 
-# The cluster consists of a master node and two worker nodes
+# This terraform configuration creates a set of EC2 VMs which 
+# serve as a basis for creating a k8s cluster consisting of
+# a master node and two worker nodes
 # All the nodes of the k8s cluster are placed in a custom VPC and more specifically 
 # in the private subnet of the custom VPC (10.0.1.0/24)
 
 terraform {
+  required_version = ">= 1.2.9"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
