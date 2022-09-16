@@ -483,12 +483,12 @@ resource "aws_network_interface" "nginx_server_iface" {
 
 
 resource "aws_instance" "ec2_nodes" {
-  for_each             = local.ec2_instances
-  ami                  = each.value.ami
-  key_name             = each.value.key_name
+  for_each = local.ec2_instances
+  ami      = each.value.ami
+  key_name = each.value.key_name
   network_interface {
     network_interface_id = each.value.network_interface.network_interface_id
-    device_index = each.value.network_interface.device_index
+    device_index         = each.value.network_interface.device_index
   }
   instance_type        = each.value.instance_type
   user_data            = each.value.user_data
