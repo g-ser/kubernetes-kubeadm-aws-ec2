@@ -48,6 +48,7 @@
     name: kubectl={{ kubernetes_version }}
     state: present
     update_cache: true
+    allow_downgrade: yes
 
 # We configure hold on kubeadm, kubectl and kubelet packages 
 # in order to make sure that are not accidentally
