@@ -20,6 +20,57 @@ provider "aws" {
   shared_credentials_files = [var.credentials_location]
 }
 
+locals {
+  # ec2_instances local variable contains all the configuration
+  # attributes of the EC2 instances in a map form
+  ec2_instances = {
+    k8s_master_node = {
+      ami      = var.master_node_ami
+      key_name = var.key_name
+      network_interface = {
+        network_interface_id = aws_network_interface.master_node_iface.id
+        device_index         = 0
+      }
+      instance_type        = var.master_node_instance_type
+      user_data            = data.cloudinit_config.master_node.rendered
+      iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
+    }
+    k8s_worker_node01 = {
+      ami      = var.worker_node_ami
+      key_name = var.key_name
+      network_interface = {
+        network_interface_id = aws_network_interface.worker_node01_iface.id
+        device_index         = 0
+      }
+      instance_type        = var.worker_node_instance_type
+      user_data            = data.cloudinit_config.k8s_worker_node01.rendered
+      iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
+    }
+    k8s_worker_node02 = {
+      ami      = var.worker_node_ami
+      key_name = var.key_name
+      network_interface = {
+        network_interface_id = aws_network_interface.worker_node02_iface.id
+        device_index         = 0
+      }
+      instance_type        = var.worker_node_instance_type
+      user_data            = data.cloudinit_config.k8s_worker_node02.rendered
+      iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
+    }
+    nginx_server = {
+      ami      = var.nginx_server_ami
+      key_name = var.key_name
+      network_interface = {
+        network_interface_id = aws_network_interface.nginx_server_iface.id
+        device_index         = 0
+      }
+      instance_type        = var.nginx_server_instance_type
+      user_data            = data.cloudinit_config.nginx_server.rendered
+      iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
+    }
+  }
+}
+
 # Create a VPC
 resource "aws_vpc" "k8s_vpc" {
   cidr_block       = var.vpc_cidr_block
@@ -141,7 +192,6 @@ resource "aws_security_group" "public" {
     Name = "public"
   }
 }
-
 
 # Create a security group for the EC2 instance 
 # which will represent the master node.
@@ -342,6 +392,36 @@ resource "aws_security_group" "worker_node" {
   }
 }
 
+# create NAT gateway attached to the public subnet
+# so all the instances located into the private subnet
+# can reach the Internet
+# This will be usefull for running commands like 
+# apt-get upgrade/update on the instances located in the
+# private subnet
+
+
+#create an aws elastic ip for the NAT gateway
+resource "aws_eip" "nat_gw_eip" {
+  vpc        = true
+  depends_on = [aws_internet_gateway.this]
+}
+
+# create the NAT gateway
+resource "aws_nat_gateway" "this" {
+  allocation_id     = aws_eip.nat_gw_eip.id
+  subnet_id         = aws_subnet.k8s_public_subnet.id
+  connectivity_type = "public"
+
+  tags = {
+    Name = "nat_gw"
+  }
+  # To ensure proper ordering, it is recommended to add an explicit dependency
+  # on the Internet Gateway for the VPC.
+  depends_on = [aws_internet_gateway.this]
+}
+
+# Create the interfaces of the EC2 instances
+
 # Create network interfaces for the three EC2 instances
 # which will be part of the k8s cluster
 # The instance representing the master node 
@@ -380,99 +460,7 @@ resource "aws_network_interface" "worker_node02_iface" {
 }
 
 
-
-# create NAT gateway attached to the public subnet
-# so all the instances located into the private subnet
-# can reach the Internet
-# This will be usefull for running commands like 
-# apt-get upgrade/update on the instances located in the
-# private subnet
-
-
-#create an aws elastic ip for the NAT gateway
-resource "aws_eip" "nat_gw_eip" {
-  vpc        = true
-  depends_on = [aws_internet_gateway.this]
-}
-
-# create the NAT gateway
-resource "aws_nat_gateway" "this" {
-  allocation_id     = aws_eip.nat_gw_eip.id
-  subnet_id         = aws_subnet.k8s_public_subnet.id
-  connectivity_type = "public"
-
-  tags = {
-    Name = "nat_gw"
-  }
-  # To ensure proper ordering, it is recommended to add an explicit dependency
-  # on the Internet Gateway for the VPC.
-  depends_on = [aws_internet_gateway.this]
-}
-
-# Create 3 EC2 instances 
-# Those will play the role of the nodes in the k8s cluster (2 worker nodes - 1 master node)
-# They will all be placed into the private subnet
-
-#create master node
-resource "aws_instance" "k8s_master_node" {
-  ami      = var.master_node_ami
-  key_name = var.key_name
-  network_interface {
-    network_interface_id = aws_network_interface.master_node_iface.id
-    device_index         = 0
-  }
-  instance_type        = var.master_node_instance_type
-  user_data            = data.cloudinit_config.master_node.rendered
-  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
-
-  tags = {
-    Name = "k8s_master_node"
-  }
-}
-
-#create worker node01
-resource "aws_instance" "k8s_worker_node01" {
-  ami      = var.worker_node_ami
-  key_name = var.key_name
-  network_interface {
-    network_interface_id = aws_network_interface.worker_node01_iface.id
-    device_index         = 0
-  }
-  instance_type        = var.worker_node_instance_type
-  user_data            = data.cloudinit_config.k8s_worker_node01.rendered
-  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
-
-  tags = {
-    Name = "k8s_worker_node01"
-  }
-}
-
-#create worker node02
-resource "aws_instance" "k8s_worker_node02" {
-  ami      = var.worker_node_ami
-  key_name = var.key_name
-  network_interface {
-    network_interface_id = aws_network_interface.worker_node02_iface.id
-    device_index         = 0
-  }
-  instance_type        = var.worker_node_instance_type
-  user_data            = data.cloudinit_config.k8s_worker_node02.rendered
-  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
-
-  tags = {
-    Name = "k8s_worker_node02"
-  }
-}
-
-
-
-# Create an AWS linux instance on the public subnet
-# This instance will play the role of an nginx server
-# and it will be used to forward kubectl commands 
-# to the master node of the cluster
-# located in the private subnet
-
-# create the interface
+# create the interface of nginx server
 resource "aws_network_interface" "nginx_server_iface" {
   subnet_id       = aws_subnet.k8s_public_subnet.id
   security_groups = [aws_security_group.public.id]
@@ -482,19 +470,31 @@ resource "aws_network_interface" "nginx_server_iface" {
   }
 }
 
-# create the instance
-resource "aws_instance" "nginx_server" {
-  ami      = var.nginx_server_ami
-  key_name = var.key_name
+# Create 4 EC2 instances 
+# Those are: 
+# 1 kubernets master node located in the private subnet
+#
+# 2 kubernetes worker nodes located in the private subnet
+#
+# 1 AWS linux instance located in the public subnet 
+# which will play the role of the nginx server 
+# and it will be used to forward external traffic (i.e. traffic from the Internet) 
+# to the kubernetes cluster
+
+
+resource "aws_instance" "ec2_nodes" {
+  for_each             = local.ec2_instances
+  ami                  = each.value.ami
+  key_name             = each.value.key_name
   network_interface {
-    network_interface_id = aws_network_interface.nginx_server_iface.id
-    device_index         = 0
+    network_interface_id = each.value.network_interface.network_interface_id
+    device_index = each.value.network_interface.device_index
   }
-  instance_type        = var.nginx_server_instance_type
-  user_data            = data.cloudinit_config.nginx_server.rendered
-  iam_instance_profile = aws_iam_instance_profile.ssm_iam_profile.name
+  instance_type        = each.value.instance_type
+  user_data            = each.value.user_data
+  iam_instance_profile = each.value.iam_instance_profile
   tags = {
-    Name = "nginx_server"
+    Name = "${each.key}"
   }
 }
 
@@ -503,12 +503,12 @@ resource "aws_instance" "nginx_server" {
 resource "local_file" "ansible_inventory" {
   content  = <<-EOT
       [nginx_server]   
-      ${aws_instance.nginx_server.id}
+      ${aws_instance.ec2_nodes["nginx_server"].id}
       [master_node]
-      ${aws_instance.k8s_master_node.id}
+      ${aws_instance.ec2_nodes["k8s_master_node"].id}
       [worker_nodes]
-      ${aws_instance.k8s_worker_node01.id}
-      ${aws_instance.k8s_worker_node02.id}
+      ${aws_instance.ec2_nodes["k8s_worker_node01"].id}
+      ${aws_instance.ec2_nodes["k8s_worker_node02"].id}
     EOT
   filename = "../configure_infra/inventory"
 }

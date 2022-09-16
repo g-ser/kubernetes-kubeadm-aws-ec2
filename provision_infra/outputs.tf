@@ -5,22 +5,22 @@ output "private_ip_nat_gw" {
 
 output "instance_id_master_node" {
   description = "EC2 instance ID of master node"
-  value       = aws_instance.k8s_master_node.id
+  value       = aws_instance.ec2_nodes["k8s_master_node"].id
 }
 
 output "instance_id_k8s_worker_node01" {
   description = "Instance ID of EC2 worker node01"
-  value       = aws_instance.k8s_worker_node01.id
+  value       = aws_instance.ec2_nodes["k8s_worker_node01"].id
 }
 
 output "instance_id_k8s_worker_node02" {
   description = "Instance ID of EC2 worker node02"
-  value       = aws_instance.k8s_worker_node02.id
+  value       = aws_instance.ec2_nodes["k8s_worker_node02"].id
 }
 
 output "public_ip_nginx_server" {
   description = "The public IP of the nginx server"
-  value       = aws_instance.nginx_server.public_ip
+  value       = aws_instance.ec2_nodes["nginx_server"].public_ip
 }
 
 output "private_ip_nginx_server" {
@@ -30,5 +30,5 @@ output "private_ip_nginx_server" {
 
 output "instance_id_nginx_server" {
   description = "Instance ID of the nginx server"
-  value       = aws_instance.nginx_server.id
+  value       = aws_instance.ec2_nodes["nginx_server"].id
 }
