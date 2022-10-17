@@ -158,7 +158,7 @@ resource "aws_route_table_association" "private_route_subnet_association" {
 
 resource "aws_security_group" "public" {
   name        = "allow_web_traffic"
-  description = "Allow ssh & web traffic"
+  description = "Allow web traffic"
   vpc_id      = aws_vpc.k8s_vpc.id
 
 
