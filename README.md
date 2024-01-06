@@ -1,6 +1,6 @@
 # Motivation
 
-The purpose of this repo is to provision quickly a kubernetes cluster on AWS EC2 instances. Since the cluster can be created within minutes, it is ideal for experimenting with kubernetes without being worried about breaking the cluster (if that happens, you just need to tear the cluster down (with ```terraform destroy```) and provision it again).
+The purpose of this repo is to provision quickly a kubernetes cluster on AWS which can be used for training on kubernetes (e.g. using kubectl commands). I built it during my studies for the CKA (Certified Kubernetes Administrator) certification. Since the cluster can be created within minutes, it is ideal for experimenting with kubernetes without being worried about breaking the cluster (if that happens, you just need to tear the cluster down (with ```terraform destroy```) and provision it again).
 
 # What's inside this repo<a name="repo_content"></a>
 
@@ -31,6 +31,10 @@ If you run both the terraform configuration files and the ansible scripts (check
 * You need to generate a pair of aws_access_key_id-aws_secret_access_key for your AWS user using the console of AWS and provide the path where the credentials are stored to the variable called ```credentials_location``` which is in ```/provision_infra/terraform.tfvars``` file. This is used by terraform to make programmatic calls to AWS.
 * You need to use AWS console (prior to running the terraform configuration files) to generate a key-pair whose name you need to specify in the ``provision_infra/terraform.tfvars`` file (variable name is ```key_name```). The ```pem``` file (which has to be downloaded from AWS and stored on your local machine) of the key pair, is used in order for Ansible to authenticate when connecting to the EC2 instances with ssh.
 * Go through the section [Accessing the EC2 instances](#access_instances) and make sure that you have [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html), as well as [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html) and the proper configuration in ```~/.ssh/config``` and ```~/.aws/config``` files. 
+* Install gantsign.golang role with the command ```ansible-galaxy install `gantsign`.golang```. This fetches the ansible role made by 
+John Freeman and places it in ```~/.ansible/roles``` in your local machine. You can find the git repo of 
+John Freeman's role [here](https://github.com/gantsign/ansible-role-golang). The Go version that is installed is ```1.21.0```.
+
 
 # Accessing the EC2 instances<a name="access_instances"></a>
 
@@ -95,14 +99,15 @@ In the folder [provision_infra](/provision_infra/) run:
 ```terraform apply```
 
 ### Run Ansible<a name="run_ansible"></a>
-In the folder [configure_infra](/configure_infra/) run:
+* Disable host key checking (optional): ```export ANSIBLE_HOST_KEY_CHECKING=False```
+* In the folder [configure_infra](/configure_infra/) run:
 ```ansible-playbook --private-key <KEY_PEM_FILE> -i inventory kubernetes_cluster.yml```
 
 # Expose applications to the Internet<a name="expose_apps"></a>
 
-The ansible scripts of this repo install NGINX ingress controller with ```kubectl apply``` using YAML manifests. More specifically, the yaml file that is used is the [configure_infra/roles/ingress/templates/nginx-ingress-controller.yaml](configure_infra/roles/ingress/templates/nginx-ingress-controller.yaml) and it was taken from [here](https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/baremetal/deploy.yaml)
+The ansible scripts of this repo install NGINX ingress controller version ```1.8.2``` with ```kubectl apply``` using YAML manifests. More specifically, the yaml file that is used is the [configure_infra/roles/ingress/templates/nginx-ingress-controller.yaml](configure_infra/roles/ingress/templates/nginx-ingress-controller.yaml) and it was taken from [here](https://github.com/kubernetes/ingress-nginx/blob/main/deploy/static/provider/baremetal/deploy.yaml)
 
-The ingress is made accessible outside the kubernetes cluster by being published as a node port (a better approach would be to publish it using an AWS load balancer but due to the fact that cloud native load balancers are costly and this infrastructure is meant to be used only for training purposes (i.e. for practicing with kubernetes), it was chosen to expose it using a node port). The node port used to expose the ingress is set to ```32451``` but it can be changed by modifying the variable ```ingress_exposed_node_port``` in file [configure_infra/group_vars/all](configure_infra/group_vars/all).
+The ingress is made accessible outside the kubernetes cluster by being published as a node port (a better approach would be to publish it using an AWS load balancer but due to the fact that cloud native load balancers are costly and this infrastructure is meant to be used only for training purposes (i.e. for practicing with kubernetes), it was chosen to expose it using a node port). The node port used to expose the ingress is set to ```32451``` but it can be changed by modifying the variable ```ingress_exposed_node_port``` in file [configure_infra/group_vars/all](configure_infra/group_vars/all). The definition of the node port service is in [configure_infra/roles/ingress/templates/nginx-ingress-controller.yaml](configure_infra/roles/ingress/templates/nginx-ingress-controller.yaml) and it was taken from [here](https://github.com/kubernetes/ingress-nginx/blob/main/deploy/static/provider/baremetal/deploy.yaml) file.
 
 As written in the [first section](#repo_content) of the current documentation, ansible configures a VM (located in the public subnet), to act as a reverse proxy. This is done by having ansible installing NGINX and then configure it to act as a reverse proxy (check [here](configure_infra/roles/nginx_server/tasks/main.yml)). That is, whatever http traffic reaches the public IP of the nginx server (its public IP is part of terraform's outputs), it is forwarded to the NGINX controller inside the kubernetes cluster through the node port ```32451```. Do not confuse the NGINX ingress controller which is part of the kubernetes cluster (deployed in the namespace called ```ingress-nginx```) with the NGINX Linux VM which resides in the public subnet and is depicted in the picture of section [Architecture](#architecture) with purple colour.
 
