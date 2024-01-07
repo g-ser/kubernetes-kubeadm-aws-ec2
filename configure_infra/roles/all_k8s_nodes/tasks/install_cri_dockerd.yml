@@ -10,7 +10,9 @@
     state: directory
 
 - name: Change the working directory to /tmp/cri-dockerd and execute go get and go build 
-  ansible.builtin.shell: /root/.go/bin/go get && /root/.go/bin/go build -o bin/cri-dockerd
+  ansible.builtin.shell: go get && go build -o bin/cri-dockerd
+  environment:
+    PATH: /sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin:/usr/local/go/bin
   args:
     chdir: /tmp/cri-dockerd
 
