@@ -1,5 +1,9 @@
 ---
-kubernetes_version: "1.25.3-00"
+kubernetes_minor_version: "1.29"
+kubernetes_patch_version: "1.29.0"
+kubelet_version: "1.29.0-1.1"
+kubectl_version: "1.29.0-1.1"
+kubeadm_version: "1.29.0-1.1"
 ingress_exposed_node_port: "32451"
 go_version: "1.21.5"
 worker_nodes_ips:
